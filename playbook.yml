@@ -1,0 +1,28 @@
+---
+- name: "automate running docker container with ansible"
+  hosts: localhost
+  tasks:
+    - name: stop running container
+      command: docker stop zero-img-container
+      ignore_errors: yes
+
+    - name: remove stopped container
+      command: docker rm zero-img-container
+      ignore_errors: yes
+
+    - name: remove used image
+      command: docker rmi zero-imge
+      ignore_errors: yes
+
+    - name: build docker image from dockerfile
+      command: docker build -t zero-imge .
+      ignore_errors: yes  
+
+    - name: create tag to image
+      command: docker tag zero-imge dina2022/py-img
+
+    - name: push image to dockerhub
+      command: docker push dina2022/py-img         
+
+    - name: run container from image
+      command: docker run -d --name zero-img-container -p 5000:5000 zero-imge
